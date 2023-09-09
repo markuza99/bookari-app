@@ -33,6 +33,15 @@ const UserModify = ({ isEdit }) => {
     role: '',
   });
 
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      httpClient.get('api/users/user-info').then(res => {
+        setUser(res.data);
+        console.log(res.data);
+      });
+    }
+  }, []);
+
   const onClickHandle = () => {
     if (user.password !== user.confirmPassword) {
       toast({
@@ -45,11 +54,10 @@ const UserModify = ({ isEdit }) => {
       });
       return;
     }
-    if (isEdit) {
+    if (localStorage.getItem('token')) {
       httpClient
-        .put(`${BE_URL + USERS}/id`, user)
+        .put(`api/users/${user.id}`, user)
         .then(res => {
-          console.log(res.data);
           navigate('/profile');
         })
         .catch(err => {
@@ -63,43 +71,28 @@ const UserModify = ({ isEdit }) => {
           });
         });
     } else {
-      const data = {
-        grant_type: 'password',
-        client_id: 'booking-auth',
-        username: 'test',
-        password: 'test',
-      };
-      const formData = queryString.stringify(data);
       axios
-        .post(
-          'http://keycloak:8080/realms/booking-realm/protocol/openid-connect/token',
-          formData,
-          {
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          }
-        )
-        .then(response => {
-          console.log('Response:', response.data);
-          localStorage.setItem('token', response.data.access_token);
-          httpClient
-            .post(`/api/users`, user)
-            .then(res => {
-              console.log(res.data);
-              navigate('/login');
-            })
-            .catch(err => {
-              toast({
-                title: 'Error while registering',
-                description: err.message,
-                status: 'error',
-                duration: 5000,
-                isClosable: true,
-                position: 'top',
-              });
-            });
+        .post('http://localhost:8081/api/users', user)
+        .then(res => {
+          toast({
+            title: 'Registration Successful',
+            description: `User with username ${user.username} successfully registered`,
+            status: 'success',
+            duration: 5000,
+            isClosable: true,
+            position: 'top',
+          });
+          navigate('/login');
         })
-        .catch(error => {
-          console.error('Error:', error);
+        .catch(err => {
+          toast({
+            title: 'Error while registering',
+            description: err.message,
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+            position: 'top',
+          });
         });
     }
   };
@@ -131,10 +124,6 @@ const UserModify = ({ isEdit }) => {
     setUser({ ...user, [name]: value });
   };
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
-
   return (
     <VStack
       display="flex"
@@ -151,6 +140,7 @@ const UserModify = ({ isEdit }) => {
             handleInputChange(e);
           }}
           name="username"
+          isDisabled={localStorage.getItem('token')}
         />
       </FormControl>
       <FormControl isRequired w="80%" mx="auto">
@@ -224,6 +214,7 @@ const UserModify = ({ isEdit }) => {
           onChange={e => {
             handleInputChange(e);
           }}
+          isDisabled={localStorage.getItem('token')}
           name="role"
         >
           <option value="GUEST">Guest</option>

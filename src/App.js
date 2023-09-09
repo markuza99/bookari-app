@@ -35,6 +35,7 @@ import SearchAccomodation from './components/accomodation/SearchAccomodation';
 import SearchAcoomodationPage from './pages/SearchAcoomodationPage';
 import AccomodationCard from './components/accomodation/AccomodationCard';
 import AccomodationsPage from './pages/AccomodationsPage';
+import AccomodationAvailability from './components/accomodation/AccomodationAvailability';
 
 const theme = extendTheme({
   styles: {
@@ -73,6 +74,10 @@ function App() {
             element={<SearchAcoomodationPage />}
           />
           <Route path="/accomodations" element={<AccomodationsPage />} />
+          <Route
+            path="/accomodation-availability/:id"
+            element={<AccomodationAvailability />}
+          />
         </Routes>
       </BrowserRouter>
     </ChakraProvider>

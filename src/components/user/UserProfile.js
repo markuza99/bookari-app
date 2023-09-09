@@ -11,6 +11,13 @@ import {
   Flex,
   Heading,
   Icon,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   SimpleGrid,
   Spacer,
   Stack,
@@ -21,12 +28,42 @@ import {
   Td,
   Text,
   Tr,
+  useDisclosure,
+  useToast,
 } from '@chakra-ui/react';
 import React from 'react';
 import { FaRegUserCircle, FaTrash, FaUserCog } from 'react-icons/fa';
 import { FiLogIn, FiUserPlus } from 'react-icons/fi';
+import { httpClient } from '../../http-client/HttpClient';
+import { useNavigate } from 'react-router-dom';
 
-const UserProfile = () => {
+const UserProfile = ({ user }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
+  const toast = useToast();
+  const handleOnDelete = () => {
+    if (user.id) {
+      httpClient
+        .delete(`api/users/${user.id}`)
+        .then(res => {
+          localStorage.clear();
+          onClose();
+          navigate('/login');
+          toast({
+            title: 'User Deleted',
+            description: `User with id ${user.id} successfully deleted`,
+            status: 'success',
+            duration: 5000,
+            isClosable: true,
+            position: 'top',
+          });
+        })
+        .catch(err => {
+          localStorage.clear();
+          navigate('/login');
+        });
+    }
+  };
   return (
     <Card>
       <CardHeader textAlign="center">
@@ -42,7 +79,7 @@ const UserProfile = () => {
               Username
             </Heading>
             <Text pt="2" fontSize="sm">
-              USERNAME
+              {user.username}
             </Text>
           </Box>
           <Box>
@@ -50,7 +87,7 @@ const UserProfile = () => {
               Full Name
             </Heading>
             <Text pt="2" fontSize="sm">
-              FIRSTNAME SURNAME
+              {user.firstName + user.lastName}
             </Text>
           </Box>
           <Box>
@@ -58,7 +95,7 @@ const UserProfile = () => {
               Email
             </Heading>
             <Text pt="2" fontSize="sm">
-              EMAIL
+              {user.email}
             </Text>
           </Box>
           <Box>
@@ -66,7 +103,7 @@ const UserProfile = () => {
               Residence
             </Heading>
             <Text pt="2" fontSize="sm">
-              RESIDENCE
+              {user.residence}
             </Text>
           </Box>
           <Box>
@@ -74,7 +111,7 @@ const UserProfile = () => {
               Role
             </Heading>
             <Text pt="2" fontSize="sm">
-              ROLE
+              {user.role}
             </Text>
           </Box>
           <Box w="80%" mx="auto">
@@ -109,13 +146,40 @@ const UserProfile = () => {
               <Button colorScheme="green" leftIcon={<Icon as={FaUserCog} />}>
                 Edit
               </Button>
-              <Button colorScheme="red" leftIcon={<Icon as={FaTrash} />}>
+              <Button
+                colorScheme="red"
+                leftIcon={<Icon as={FaTrash} />}
+                onClick={() => onOpen()}
+              >
                 Delete
               </Button>
             </ButtonGroup>
           </Center>
         </Stack>
       </CardBody>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+
+        <ModalContent>
+          <ModalHeader textAlign={'center'}>Deleting user</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody textAlign="center">
+            <Text fontSize={'xl'}>
+              Are you sure you want to delete account?
+            </Text>
+          </ModalBody>
+          <ModalFooter textAlign="center" alignSelf="center">
+            <ButtonGroup spacing={1}>
+              <Button colorScheme="red" onClick={() => handleOnDelete()}>
+                Yes
+              </Button>
+              <Button colorScheme="blue" onClick={onClose}>
+                No
+              </Button>
+            </ButtonGroup>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Card>
   );
 };
