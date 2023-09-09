@@ -72,7 +72,7 @@ const UserModify = ({ isEdit }) => {
       const formData = queryString.stringify(data);
       axios
         .post(
-          'http://localhost:8080/realms/booking-realm/protocol/openid-connect/token',
+          'http://keycloak:8080/realms/booking-realm/protocol/openid-connect/token',
           formData,
           {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },

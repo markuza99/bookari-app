@@ -10,6 +10,7 @@ const RegisterPage = () => {
         <Box textAlign="center">
           <BookariIcon />
         </Box>
+        <Box></Box>
         <UserModify isEdit={false} />
       </Box>
     </Box>
