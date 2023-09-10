@@ -36,8 +36,9 @@ const LoginForm = () => {
         localStorage.setItem('token', res.data);
         httpClient.get('/api/users/user-info').then(res => {
           localStorage.setItem('userId', res.data.id);
+          localStorage.setItem('role', res.data.role);
+          navigate('/profile');
         });
-        navigate('/profile');
       })
       .catch(err => {
         console.log(err);

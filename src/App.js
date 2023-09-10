@@ -38,6 +38,7 @@ import AccomodationsPage from './pages/AccomodationsPage';
 import AccomodationAvailability from './components/accomodation/AccomodationAvailability';
 import DetailViewAccommodationPage from './pages/DetailViewAccommodationPage';
 import AccomodationAvailabilityPage from './pages/AccomodationAvailabilityPage';
+import Navbar from './components/navbar/Navbar';
 
 const theme = extendTheme({
   styles: {
@@ -53,9 +54,13 @@ function App() {
   return (
     <ChakraProvider theme={theme}>
       <BrowserRouter>
+        <Navbar />
+
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/edit" element={<RegisterPage />} />
+
           <Route path="/profile" element={<UserProfilePage />} />
           <Route
             path="/reservations-guest"

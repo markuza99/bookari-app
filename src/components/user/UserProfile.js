@@ -87,7 +87,7 @@ const UserProfile = ({ user }) => {
               Full Name
             </Heading>
             <Text pt="2" fontSize="sm">
-              {user.firstName + user.lastName}
+              {user.firstName + ' ' + user.lastName}
             </Text>
           </Box>
           <Box>
@@ -143,7 +143,13 @@ const UserProfile = ({ user }) => {
           </Box>
           <Center>
             <ButtonGroup gap={4}>
-              <Button colorScheme="green" leftIcon={<Icon as={FaUserCog} />}>
+              <Button
+                colorScheme="green"
+                leftIcon={<Icon as={FaUserCog} />}
+                onClick={() => {
+                  navigate('/edit');
+                }}
+              >
                 Edit
               </Button>
               <Button
