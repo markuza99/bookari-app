@@ -37,6 +37,8 @@ import AccomodationCard from './components/accomodation/AccomodationCard';
 import AccomodationsPage from './pages/AccomodationsPage';
 import AccomodationAvailability from './components/accomodation/AccomodationAvailability';
 import DetailViewAccommodationPage from './pages/DetailViewAccommodationPage';
+import AccomodationAvailabilityPage from './pages/AccomodationAvailabilityPage';
+
 const theme = extendTheme({
   styles: {
     global: {
@@ -76,7 +78,7 @@ function App() {
           <Route path="/accomodations" element={<AccomodationsPage />} />
           <Route
             path="/accomodation-availability/:id"
-            element={<AccomodationAvailability />}
+            element={<AccomodationAvailabilityPage />}
           />
           <Route
             path="/accomodations/:id"
