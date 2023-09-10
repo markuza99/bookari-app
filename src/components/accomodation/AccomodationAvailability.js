@@ -1,4 +1,5 @@
 import {
+  Button,
   Heading,
   Table,
   TableContainer,
@@ -10,29 +11,26 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 
-const AccomodationAvailability = () => {
+const AccomodationAvailability = ({ availability }) => {
   return (
     <>
-      <Heading>Accomodation ACCOMODATION</Heading>
-      <Heading>Price is per Guest/For Entire Accommodation</Heading>
-      <TableContainer my="10%">
+      <TableContainer my="10%" overflow="auto" h="20%">
         <Table variant="striped" colorScheme="blackAlpha">
           <Thead>
             <Tr>
-              <Th>Date From</Th>
-              <Th>Date To</Th>
+              <Th>Date</Th>
               <Th>Price</Th>
-              <Th>Update</Th>
             </Tr>
           </Thead>
           <Tbody>
-            <Tr>
-              <Td>USERNAME</Td>
-              <Td>2022-10-10</Td>
-              <Td>2022-10-13</Td>
-              <Td>5</Td>
-              <Td>5000 USD</Td>
-            </Tr>
+            {availability.map(available => {
+              return (
+                <Tr>
+                  <Td>{available.date}</Td>
+                  <Td>{available.price}</Td>
+                </Tr>
+              );
+            })}
           </Tbody>
         </Table>
       </TableContainer>

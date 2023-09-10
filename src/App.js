@@ -36,6 +36,7 @@ import SearchAcoomodationPage from './pages/SearchAcoomodationPage';
 import AccomodationCard from './components/accomodation/AccomodationCard';
 import AccomodationsPage from './pages/AccomodationsPage';
 import AccomodationAvailability from './components/accomodation/AccomodationAvailability';
+import AccomodationAvailabilityPage from './pages/AccomodationAvailabilityPage';
 
 const theme = extendTheme({
   styles: {
@@ -76,7 +77,7 @@ function App() {
           <Route path="/accomodations" element={<AccomodationsPage />} />
           <Route
             path="/accomodation-availability/:id"
-            element={<AccomodationAvailability />}
+            element={<AccomodationAvailabilityPage />}
           />
         </Routes>
       </BrowserRouter>
