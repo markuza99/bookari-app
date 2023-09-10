@@ -23,31 +23,53 @@ import {
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import ReactStars from 'react-rating-stars-component';
+import { httpClient } from '../../http-client/HttpClient';
 
-const ReviewTable = () => {
+const ReviewTable = ({ canDelete, revieweeId, type }) => {
+  const [reviews, setReviews] = useState([]);
+  const [averageRating, setAverageRating] = useState(0);
+
+  useEffect(() => {
+    httpClient
+      .get(`/api/reviews/${revieweeId}`)
+      .then(res => {
+        setReviews(res.data.reviews);
+        setAverageRating(res.data.averageRating);
+        console.log(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <TableContainer my="10%">
       <Table variant="striped" colorScheme="blackAlpha">
+        <TableCaption>
+          {type} average rating: {averageRating}.{' '}
+        </TableCaption>
         <Thead>
           <Tr>
             <Th>Reviewer</Th>
-            <Th>Reviewee</Th>
-            <Th>Review Made On</Th>
             <Th>Review</Th>
           </Tr>
         </Thead>
         <Tbody>
-          <Tr>
-            <Td>GUEST</Td>
-            <Td>HOST</Td>
-            <Td>29-01-2020</Td>
-            <Td>
-              <ReactStars value={2} edit={false} />
-            </Td>
-            <Td>
-              <Button colorScheme="red">Delete</Button>
-            </Td>
-          </Tr>
+          {reviews.map(a => {
+            return (
+              <Tr>
+                <Td>{a.reviewerId}</Td>
+                <Td>
+                  <ReactStars value={a.rating} edit={false} />
+                </Td>
+                {canDelete && (
+                  <Td>
+                    <Button colorScheme="red">Delete</Button>
+                  </Td>
+                )}
+              </Tr>
+            );
+          })}
         </Tbody>
       </Table>
     </TableContainer>
