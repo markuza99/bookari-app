@@ -34,6 +34,9 @@ const LoginForm = () => {
       .post('http://localhost:8081/api/users/login', credentials)
       .then(res => {
         localStorage.setItem('token', res.data);
+        httpClient.get('/api/users/user-info').then(res => {
+          localStorage.setItem('userId', res.data.id);
+        });
         navigate('/profile');
       })
       .catch(err => {

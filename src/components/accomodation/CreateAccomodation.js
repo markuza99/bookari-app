@@ -94,7 +94,10 @@ const CreateAccomodation = () => {
     console.log(accommodation.utilities);
     // TODO host id
     httpClient
-      .post('/api/accommodation', { ...accommodation, hostId: 'NEKI' })
+      .post('/api/accommodation', {
+        ...accommodation,
+        hostId: localStorage.getItem('userId'),
+      })
       .then(response => {
         console.log('Response:', response.data);
         toast({
