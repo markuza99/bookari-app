@@ -31,7 +31,7 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaRegUserCircle, FaTrash, FaUserCog } from 'react-icons/fa';
 import { FiLogIn, FiUserPlus } from 'react-icons/fi';
 import { httpClient } from '../../http-client/HttpClient';
@@ -41,6 +41,34 @@ const UserProfile = ({ user }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
   const toast = useToast();
+  const [notifications, setNotifications] = useState({
+    userId: user.id ? user.id : null,
+    bookingRequests: false,
+    reservationsCanceled: false,
+    newProfileReviews: false,
+    newAccomodationReviews: false,
+    bookingRequestAnswers: false,
+  });
+
+  useEffect(() => {
+    if (user) {
+      //   httpClient.get(`api/notifiation/user-preferences/${user.id}`).then(res =>
+      //     setNotifications(
+      //       !res.data
+      //         ? {
+      //             userId: user.id,
+      //             bookingRequests: false,
+      //             reservationsCanceled: false,
+      //             newProfileReviews: false,
+      //             newAccomodationReviews: false,
+      //             bookingRequestAnswers: false,
+      //           }
+      //         : res.data
+      //     )
+      //   );
+    }
+  }, [user]);
+
   const handleOnDelete = () => {
     if (user.id) {
       httpClient
@@ -116,29 +144,42 @@ const UserProfile = ({ user }) => {
           </Box>
           <Box w="80%" mx="auto">
             <Table variant="simple">
-              <Tbody>
-                <Tr>
-                  <Td>
-                    <Checkbox>
-                      Notify me when users send a reservation requests
-                    </Checkbox>
-                  </Td>
-                  <Td>
-                    {' '}
-                    <Checkbox>
-                      Notify me when users cancel a reservation
-                    </Checkbox>
-                  </Td>
-                </Tr>
-                <Tr>
-                  <Td>
-                    <Checkbox w="100%">Notify me when users review me</Checkbox>
-                  </Td>
-                  <Td>
-                    <Checkbox w="100%">Notify me when users review me</Checkbox>
-                  </Td>
-                </Tr>
-              </Tbody>
+              {user.role === 'HOST' ? (
+                <Tbody>
+                  <Tr>
+                    <Td>
+                      <Checkbox>
+                        Notify me when users send a reservation requests
+                      </Checkbox>
+                    </Td>
+                    <Td>
+                      <Checkbox>
+                        Notify me when users cancel a reservation
+                      </Checkbox>
+                    </Td>
+                  </Tr>
+                  <Tr>
+                    <Td>
+                      <Checkbox w="100%">
+                        Notify me when users review me
+                      </Checkbox>
+                    </Td>
+                    <Td>
+                      <Checkbox w="100%">
+                        Notify me when users review me
+                      </Checkbox>
+                    </Td>
+                  </Tr>
+                </Tbody>
+              ) : (
+                <Tbody>
+                  <Tr>
+                    <Td>
+                      <Checkbox>Notify me when host answers a request</Checkbox>
+                    </Td>
+                  </Tr>
+                </Tbody>
+              )}
             </Table>
           </Box>
           <Center>
