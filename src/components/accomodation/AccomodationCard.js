@@ -29,7 +29,13 @@ const AccomodationCard = ({
 
   return (
     <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden">
-      <Image src={'https://bit.ly/2Z4KKcF'} alt={'https://bit.ly/2Z4KKcF'} />
+      <Image
+        src={
+          accommodation.photographs
+            ? accommodation.photographs[0]
+            : 'https://www.codespeedy.com/wp-content/uploads/2019/03/Chrome-Broken-Image-Icon.png'
+        }
+      />
 
       <Box p="6">
         <Box display="flex" alignItems="baseline"></Box>

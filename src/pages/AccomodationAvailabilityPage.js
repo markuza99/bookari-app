@@ -58,9 +58,7 @@ const AccomodationAvailabilityPage = () => {
         p="2%"
       >
         <Heading textAlign="center">{accommodation.name}</Heading>
-        <Heading textAlign="center">
-          Price is {accommodation.priceType.replaceAll('_', ' ').toLowerCase()}
-        </Heading>
+
         <Heading textAlign="center">
           <Heading textAlign="center">
             <ButtonGroup gap={4}>

@@ -14,9 +14,10 @@ const UserProfilePage = () => {
         setUser(res.data);
         console.log(res.data);
       })
-      .catch(() => {
+      .catch(err => {
         localStorage.clear();
         navigate('/login');
+        console.log('err');
       });
   }, []);
 
