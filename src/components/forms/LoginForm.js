@@ -34,13 +34,20 @@ const LoginForm = () => {
       .post('http://localhost:8081/api/users/login', credentials)
       .then(res => {
         localStorage.setItem('token', res.data);
-        httpClient.get('/api/users/user-info').then(res => {
-          localStorage.setItem('userId', res.data.id);
-          localStorage.setItem('role', res.data.role);
-          navigate('/profile');
-        });
+        httpClient
+          .get('/api/users/user-info')
+          .then(res => {
+            localStorage.setItem('userId', res.data.id);
+            localStorage.setItem('role', res.data.role);
+            navigate('/profile');
+          })
+          .catch(err => {
+            console.log(err);
+            localStorage.clear();
+          });
       })
       .catch(err => {
+        console.log('HERE');
         console.log(err);
       });
   };

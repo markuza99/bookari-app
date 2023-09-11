@@ -100,6 +100,7 @@ const CreateAccomodation = () => {
       })
       .then(response => {
         console.log('Response:', response.data);
+        console.log(accommodation);
         toast({
           title: 'Success',
           description: 'Successfully created accommodation',
@@ -168,8 +169,17 @@ const CreateAccomodation = () => {
         />
       </FormControl>
       <FormControl isRequired w="80%" mx="auto">
-        <FormLabel>Images</FormLabel>
-        <Input type="file" accept="image/jpeg, image/png" />
+        <FormLabel>Image</FormLabel>
+        <Input
+          onChange={e => {
+            {
+              setAccommodation({
+                ...accommodation,
+                photographs: e.target.value ? [e.target.value] : null,
+              });
+            }
+          }}
+        />
       </FormControl>
       <Table variant="simple" w="80%">
         <Tbody>

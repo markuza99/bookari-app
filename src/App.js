@@ -38,6 +38,8 @@ import AccomodationAvailability from './components/accomodation/AccomodationAvai
 import DetailViewAccommodationPage from './pages/DetailViewAccommodationPage';
 import AccomodationAvailabilityPage from './pages/AccomodationAvailabilityPage';
 import Navbar from './components/navbar/Navbar';
+import AccomodationHostTable from './components/accomodation/AccomodationHostTable';
+import AccomodationsHostPage from './pages/AccomodationsHostPage';
 
 const theme = extendTheme({
   styles: {
@@ -87,6 +89,10 @@ function App() {
           <Route
             path="/accomodations/:id"
             element={<DetailViewAccommodationPage />}
+          />
+          <Route
+            path="/my-accommodations"
+            element={<AccomodationsHostPage />}
           />
         </Routes>
       </BrowserRouter>
