@@ -16,14 +16,49 @@ import {
   Spacer,
   VStack,
   useDisclosure,
+  Text,
+  useToast,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GrNotification } from 'react-icons/gr';
+import { httpClient } from '../../http-client/HttpClient';
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const toast = useToast();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    let timer;
+
+    // This effect runs when the component mounts
+    timer = setInterval(() => {
+      getItems();
+    }, 1000);
+
+    // This effect runs when the component unmounts
+    return () => {
+      clearInterval(timer);
+    };
+  }, []); // Empty dependency array means this effect runs only on mount and unmount
+
+  const getItems = () => {
+    if (localStorage.getItem('userId')) {
+      httpClient
+        .get(`/api/notification/${localStorage.getItem('userId')}`)
+        .then(res => {
+          const newNotifications = res.data;
+          setNotifications(newNotifications);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  };
 
   return (
     <Flex
@@ -173,15 +208,14 @@ const Navbar = () => {
 
           <DrawerBody>
             <VStack gap={2} w="100%">
-              <Box w="100%" h="100px" bgColor="green.300" color="white">
-                WRITE HERE
-              </Box>
-              <Box w="100%" h="100px" bgColor="green.300" color="white">
-                WRITE HERE
-              </Box>
-              <Box w="100%" h="100px" bgColor="green.300" color="white">
-                WRITE HERE
-              </Box>
+              {notifications.map(a => {
+                return (
+                  <Box w="100%" h="100px" bgColor="green.300" color="white">
+                    <Text>{a.message}</Text>
+                    <Text>Notification type; {a.notificationType}</Text>
+                  </Box>
+                );
+              })}
             </VStack>
           </DrawerBody>
         </DrawerContent>

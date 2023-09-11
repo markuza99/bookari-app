@@ -41,38 +41,43 @@ const UserProfile = ({ user }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
   const toast = useToast();
-  const [notifications, setNotifications] = useState({
-    userId: user.id ? user.id : null,
-    bookingRequests: false,
-    reservationsCanceled: false,
-    newProfileReviews: false,
-    newAccomodationReviews: false,
-    bookingRequestAnswers: false,
-  });
+  const [notifications, setNotifications] = useState({});
 
   useEffect(() => {
-    if (user) {
-      //   httpClient.get(`api/notifiation/user-preferences/${user.id}`).then(res =>
-      //     setNotifications(
-      //       !res.data
-      //         ? {
-      //             userId: user.id,
-      //             bookingRequests: false,
-      //             reservationsCanceled: false,
-      //             newProfileReviews: false,
-      //             newAccomodationReviews: false,
-      //             bookingRequestAnswers: false,
-      //           }
-      //         : res.data
-      //     )
-      //   );
-    }
-  }, [user]);
+    httpClient
+      .get(
+        `/api/notification/user-preferences/${localStorage.getItem('userId')}`
+      )
+      .then(res => {
+        setNotifications(res.data);
+        console.log(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
 
   const handleOnNotificationClick = () => {
-    httpClient.post('api/notification', notifications).then(res => {
-      console.log(res.data);
-    });
+    httpClient
+      .post('/api/notification/user-preferences', {
+        ...notifications,
+        userId: localStorage.getItem('userId'),
+      })
+      .then(res => {
+        console.log(res.data);
+        toast({
+          title: 'Updated notifications',
+          description: `Preferences updated`,
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+          position: 'top',
+        });
+        setNotifications(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   const handleOnDelete = () => {
@@ -155,6 +160,7 @@ const UserProfile = ({ user }) => {
                   <Tr>
                     <Td>
                       <Checkbox
+                        isChecked={notifications.bookingRequests}
                         onChange={e => {
                           setNotifications({
                             ...notifications,
@@ -166,19 +172,45 @@ const UserProfile = ({ user }) => {
                       </Checkbox>
                     </Td>
                     <Td>
-                      <Checkbox>
+                      <Checkbox
+                        isChecked={notifications.reservationsCanceled}
+                        onChange={e => {
+                          setNotifications({
+                            ...notifications,
+                            reservationsCanceled: e.target.checked,
+                          });
+                        }}
+                      >
                         Notify me when users cancel a reservation
                       </Checkbox>
                     </Td>
                   </Tr>
                   <Tr>
                     <Td>
-                      <Checkbox w="100%">
+                      <Checkbox
+                        isChecked={notifications.newProfileReviews}
+                        onChange={e => {
+                          setNotifications({
+                            ...notifications,
+                            newProfileReviews: e.target.checked,
+                          });
+                        }}
+                        w="100%"
+                      >
                         Notify me when users review me
                       </Checkbox>
                     </Td>
                     <Td>
-                      <Checkbox w="100%">
+                      <Checkbox
+                        isChecked={notifications.newAccomodationReviews}
+                        onChange={e => {
+                          setNotifications({
+                            ...notifications,
+                            newAccomodationReviews: e.target.checked,
+                          });
+                        }}
+                        w="100%"
+                      >
                         Notify me when users review me
                       </Checkbox>
                     </Td>
@@ -188,7 +220,17 @@ const UserProfile = ({ user }) => {
                 <Tbody>
                   <Tr>
                     <Td>
-                      <Checkbox>Notify me when host answers a request</Checkbox>
+                      <Checkbox
+                        isChecked={notifications.bookingRequestAnswers}
+                        onChange={e => {
+                          setNotifications({
+                            ...notifications,
+                            bookingRequestAnswers: e.target.checked,
+                          });
+                        }}
+                      >
+                        Notify me when host answers a request
+                      </Checkbox>
                     </Td>
                   </Tr>
                 </Tbody>
@@ -197,10 +239,8 @@ const UserProfile = ({ user }) => {
             <Center>
               <Button
                 colorScheme="red"
-                // leftIcon={<Icon as={FaUserCog} />}
-                // onClick={() => {
-                //   navigate('/edit');
-                // }}
+                leftIcon={<Icon as={FaUserCog} />}
+                onClick={handleOnNotificationClick}
               >
                 Save notification settings
               </Button>

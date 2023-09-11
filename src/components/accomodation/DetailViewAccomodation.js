@@ -27,6 +27,7 @@ import {
   RadioGroup,
   Stack,
 } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
 import ReviewTable from '../review/ReviewTable';
 import { httpClient } from '../../http-client/HttpClient';
@@ -43,6 +44,7 @@ const DetailViewAccomodation = ({
 }) => {
   const toast = useToast();
   const [accommodation, setAccommodation] = useState(null);
+  let navigate = useNavigate();
 
   useEffect(() => {
     httpClient
@@ -76,6 +78,8 @@ const DetailViewAccomodation = ({
           isClosable: true,
           position: 'top',
         });
+
+        navigate(`/reservations-guest`);
       });
   };
 
