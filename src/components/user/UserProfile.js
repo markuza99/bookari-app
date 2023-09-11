@@ -69,6 +69,12 @@ const UserProfile = ({ user }) => {
     }
   }, [user]);
 
+  const handleOnNotificationClick = () => {
+    httpClient.post('api/notification', notifications).then(res => {
+      console.log(res.data);
+    });
+  };
+
   const handleOnDelete = () => {
     if (user.id) {
       httpClient
@@ -148,7 +154,14 @@ const UserProfile = ({ user }) => {
                 <Tbody>
                   <Tr>
                     <Td>
-                      <Checkbox>
+                      <Checkbox
+                        onChange={e => {
+                          setNotifications({
+                            ...notifications,
+                            bookingRequests: e.target.checked,
+                          });
+                        }}
+                      >
                         Notify me when users send a reservation requests
                       </Checkbox>
                     </Td>
@@ -180,7 +193,18 @@ const UserProfile = ({ user }) => {
                   </Tr>
                 </Tbody>
               )}
-            </Table>
+            </Table>{' '}
+            <Center>
+              <Button
+                colorScheme="red"
+                // leftIcon={<Icon as={FaUserCog} />}
+                // onClick={() => {
+                //   navigate('/edit');
+                // }}
+              >
+                Save notification settings
+              </Button>
+            </Center>
           </Box>
           <Center>
             <ButtonGroup gap={4}>
