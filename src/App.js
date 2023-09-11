@@ -65,7 +65,7 @@ function App() {
           <Route path="/profile" element={<UserProfilePage />} />
           <Route
             path="/reservations-guest"
-            element={<ReservationPage role="guest" />}
+            element={<ReservationPage role="user" />}
           />
           <Route
             path="/reservations-host"

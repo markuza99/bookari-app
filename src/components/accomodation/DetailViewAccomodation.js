@@ -61,7 +61,7 @@ const DetailViewAccomodation = ({
       .post('/api/accommodation/booking', {
         startDate: startDate,
         endDate: endDate,
-        userId: 'USER1',
+        userId: localStorage.getItem('userId'),
         numOfGuests: guests,
         accomodationId: accomodationId,
       })

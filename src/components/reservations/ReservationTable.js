@@ -49,7 +49,7 @@ const ReservationTable = ({ role, data, callback }) => {
               <Th>Date To</Th>
               <Th>Number Of Guests</Th>
               <Th>Price</Th>
-              {role === 'GUEST' ? (
+              {role === 'user' ? (
                 <>
                   <Th>Cancel Reservation</Th>
                   <Th>Review Accomodation</Th>
@@ -71,7 +71,7 @@ const ReservationTable = ({ role, data, callback }) => {
                   <Td>{elem.numOfGuests}</Td>
                   <Td>{elem.price}</Td>
 
-                  {role === 'guest' ? (
+                  {role === 'user' ? (
                     <>
                       <Td>
                         <Button colorScheme="red" onClick={onOpenCancel}>

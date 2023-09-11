@@ -66,7 +66,7 @@ const ReservationRequestTable = ({ role, data, callback }) => {
               <Th>Price</Th>
               <Th>Status</Th>
 
-              {role === 'guest' ? (
+              {role === 'user' ? (
                 <>
                   <Th>Cancel Request</Th>
                 </>
@@ -91,7 +91,7 @@ const ReservationRequestTable = ({ role, data, callback }) => {
                   <Td>{elem.price}</Td>
                   <Td>{elem.status}</Td>
 
-                  {role === 'guest' ? (
+                  {role === 'user' ? (
                     <>
                       <Td>
                         <Button
