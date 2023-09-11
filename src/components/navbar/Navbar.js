@@ -111,6 +111,21 @@ const Navbar = () => {
           <Spacer />
         </>
       )}
+      {localStorage.getItem('role') === 'HOST' && (
+        <>
+          <Box p="2">
+            <Heading
+              size="md"
+              onClick={() => {
+                navigate(`/create-accomodation`);
+              }}
+            >
+              Create Accommodation
+            </Heading>
+          </Box>
+          <Spacer />
+        </>
+      )}
 
       {localStorage.getItem('token') ? (
         <>
