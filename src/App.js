@@ -25,7 +25,6 @@ import UserModify from './components/user/UserModify';
 import RegisterPage from './pages/RegisterPage';
 import UserProfile from './components/user/UserProfile';
 import UserProfilePage from './pages/UserProfilePage';
-import ReservationTable from './components/reservations/ReservationTable';
 import ReservationPage from './pages/ReservationPage';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ReviewTablePage from './pages/ReviewTablePage';
@@ -59,11 +58,11 @@ function App() {
           <Route path="/profile" element={<UserProfilePage />} />
           <Route
             path="/reservations-guest"
-            element={<ReservationPage role="GUEST" />}
+            element={<ReservationPage role="guest" />}
           />
           <Route
             path="/reservations-host"
-            element={<ReservationPage role="HOST" />}
+            element={<ReservationPage role="host" />}
           />
 
           <Route path="/review-table" element={<ReviewTablePage />} />

@@ -24,18 +24,33 @@ import {
 import React, { useEffect, useState } from 'react';
 import ReservationCancelModal from './ReservationCancelModal';
 import ReviewModal from './ReviewModal';
+import { httpClient } from '../../http-client/HttpClient';
 
-const ReservationTable = ({ role, data, callback }) => {
-  const {
-    isOpen: isOpenCancel,
-    onOpen: onOpenCancel,
-    onClose: onCloseCancel,
-  } = useDisclosure();
-  const {
-    isOpen: isOpenReview,
-    onOpen: onOpenReview,
-    onClose: onCloseReview,
-  } = useDisclosure();
+const ReservationRequestTable = ({ role, data, callback }) => {
+  const handleCancelRequest = id => {
+    httpClient.delete(`/api/accommodation/booking/request/${id}`).then(res => {
+      console.log(res.data);
+      callback();
+    });
+  };
+
+  const handleApproveRequest = id => {
+    httpClient
+      .put(`/api/accommodation/booking/request/${id}/approve`)
+      .then(res => {
+        console.log(res.data);
+        callback();
+      });
+  };
+
+  const handleDenyRequest = id => {
+    httpClient
+      .put(`/api/accommodation/booking/request/${id}/reject`)
+      .then(res => {
+        console.log(res.data);
+        callback();
+      });
+  };
 
   return (
     <>
@@ -49,14 +64,18 @@ const ReservationTable = ({ role, data, callback }) => {
               <Th>Date To</Th>
               <Th>Number Of Guests</Th>
               <Th>Price</Th>
-              {role === 'GUEST' ? (
+              <Th>Status</Th>
+
+              {role === 'guest' ? (
                 <>
-                  <Th>Cancel Reservation</Th>
-                  <Th>Review Accomodation</Th>
-                  <Th>Review Host</Th>
+                  <Th>Cancel Request</Th>
                 </>
               ) : (
-                <></>
+                <>
+                  <Th>No. of cancellations</Th>
+                  <Th>Deny Reservation</Th>
+                  <Th>Approve Reservation</Th>
+                </>
               )}
             </Tr>
           </Thead>
@@ -70,31 +89,43 @@ const ReservationTable = ({ role, data, callback }) => {
                   <Td>{elem.endDate}</Td>
                   <Td>{elem.numOfGuests}</Td>
                   <Td>{elem.price}</Td>
+                  <Td>{elem.status}</Td>
 
                   {role === 'guest' ? (
                     <>
                       <Td>
-                        <Button colorScheme="red" onClick={onOpenCancel}>
-                          Cancel
-                        </Button>
-                      </Td>
-                      <Td>
                         <Button
-                          colorScheme="yellow"
-                          color="white"
-                          onClick={onOpenReview}
+                          colorScheme="red"
+                          onClick={() => handleCancelRequest(elem.id)}
                         >
-                          Review
-                        </Button>
-                      </Td>
-                      <Td>
-                        <Button colorScheme="yellow" color="white">
-                          Review
+                          Cancel
                         </Button>
                       </Td>
                     </>
                   ) : (
-                    <></>
+                    <>
+                      <Td>5</Td>
+                      <Td>
+                        <Button
+                          colorScheme="red"
+                          color="white"
+                          onClick={() => handleDenyRequest(elem.id)}
+                        >
+                          Deny
+                        </Button>
+                      </Td>
+                      <Td>
+                        <Button
+                          colorScheme="green"
+                          color="white"
+                          onClick={() => {
+                            handleApproveRequest(elem.id);
+                          }}
+                        >
+                          Approve
+                        </Button>
+                      </Td>
+                    </>
                   )}
                 </Tr>
               );
@@ -102,16 +133,8 @@ const ReservationTable = ({ role, data, callback }) => {
           </Tbody>
         </Table>
       </TableContainer>
-      <Modal isOpen={isOpenCancel} onClose={onCloseCancel}>
-        <ModalOverlay />
-        <ReservationCancelModal onClose={onCloseCancel} />
-      </Modal>
-      <Modal isOpen={isOpenReview} onClose={onCloseReview}>
-        <ModalOverlay />
-        <ReviewModal onClose={onCloseReview} />
-      </Modal>
     </>
   );
 };
 
-export default ReservationTable;
+export default ReservationRequestTable;
