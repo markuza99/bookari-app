@@ -34,6 +34,7 @@ const ReservationPage = ({ role }) => {
       .then(res => {
         setBookings(res.data);
         console.log(res.data);
+        console.log('HEEEJ');
       })
       .catch(err => {
         console.log(err);

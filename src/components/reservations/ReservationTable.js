@@ -24,6 +24,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import ReservationCancelModal from './ReservationCancelModal';
 import ReviewModal from './ReviewModal';
+import { httpClient } from '../../http-client/HttpClient';
 
 const ReservationTable = ({ role, data, callback }) => {
   const {
@@ -36,6 +37,26 @@ const ReservationTable = ({ role, data, callback }) => {
     onOpen: onOpenReview,
     onClose: onCloseReview,
   } = useDisclosure();
+
+  const [reviewee, setReviewee] = useState({
+    revieweeId: '',
+    revieweeType: '',
+  });
+
+  useEffect(() => {
+    if (reviewee.revieweeId) {
+      onOpenReview();
+    }
+  }, [reviewee]);
+
+  useEffect(() => {
+    if (!isOpenReview) {
+      setReviewee({
+        revieweeId: '',
+        revieweeType: '',
+      });
+    }
+  }, [isOpenReview]);
 
   return (
     <>
@@ -82,13 +103,32 @@ const ReservationTable = ({ role, data, callback }) => {
                         <Button
                           colorScheme="yellow"
                           color="white"
-                          onClick={onOpenReview}
+                          onClick={() =>
+                            setReviewee({
+                              revieweeId: elem.accomodationId,
+                              revieweeType: 'ACCOMODATION',
+                            })
+                          }
                         >
                           Review
                         </Button>
                       </Td>
                       <Td>
-                        <Button colorScheme="yellow" color="white">
+                        <Button
+                          colorScheme="yellow"
+                          color="white"
+                          onClick={() => {
+                            httpClient
+                              .get('/api/accommodation/' + elem.accomodationId)
+                              .then(res => {
+                                console.log(res.data.hostId);
+                                setReviewee({
+                                  revieweeId: res.data.hostId,
+                                  revieweeType: 'HOST',
+                                });
+                              });
+                          }}
+                        >
                           Review
                         </Button>
                       </Td>
@@ -108,7 +148,12 @@ const ReservationTable = ({ role, data, callback }) => {
       </Modal>
       <Modal isOpen={isOpenReview} onClose={onCloseReview}>
         <ModalOverlay />
-        <ReviewModal onClose={onCloseReview} />
+        <ReviewModal
+          onClose={onCloseReview}
+          reviewee={reviewee.revieweeId}
+          revieweeType={reviewee.revieweeType}
+          reviewer={localStorage.getItem('userId')}
+        />
       </Modal>
     </>
   );

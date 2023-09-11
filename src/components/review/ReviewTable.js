@@ -43,7 +43,7 @@ const ReviewTable = ({ canDelete, revieweeId, type }) => {
   }, []);
 
   return (
-    <TableContainer my="10%">
+    <TableContainer my="1%">
       <Table variant="striped" colorScheme="blackAlpha">
         <TableCaption>
           {type} average rating: {averageRating}.{' '}

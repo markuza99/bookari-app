@@ -40,6 +40,7 @@ import AccomodationAvailabilityPage from './pages/AccomodationAvailabilityPage';
 import Navbar from './components/navbar/Navbar';
 import AccomodationHostTable from './components/accomodation/AccomodationHostTable';
 import AccomodationsHostPage from './pages/AccomodationsHostPage';
+import ReviewGuestTable from './components/reservations/ReviewGuestTable';
 
 const theme = extendTheme({
   styles: {
@@ -72,7 +73,7 @@ function App() {
             element={<ReservationPage role="host" />}
           />
 
-          <Route path="/review-table" element={<ReviewTablePage />} />
+          <Route path="/review-table" element={<ReviewGuestTable />} />
           <Route
             path="/create-accomodation"
             element={<CreateAccomodationPage />}

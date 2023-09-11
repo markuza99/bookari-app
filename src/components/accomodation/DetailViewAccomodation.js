@@ -83,6 +83,12 @@ const DetailViewAccomodation = ({
       });
   };
 
+  const getHostId = id => {
+    httpClient('/api/accommodation/' + id).get(res => {
+      console.log(res);
+    });
+  };
+
   return (
     accommodation && (
       <VStack
